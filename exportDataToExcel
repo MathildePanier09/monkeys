@@ -1,0 +1,31 @@
+// Instantiating a Workbook object
+Workbook workbook = new Workbook();
+Worksheet worksheet = workbook.getWorksheets().get(0);
+
+// Read JSON file
+File file = new File("C:\\Files\\sample.json");
+BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+    String jsonInput = "";
+    String tempString;
+    while ((tempString = bufferedReader.readLine()) != null) {
+      jsonInput = jsonInput + tempString; 
+    }
+    bufferedReader.close();
+
+// Set Styles
+CellsFactory factory = new CellsFactory();
+Style style = factory.createStyle();
+style.setHorizontalAlignment(TextAlignmentType.CENTER);
+style.getFont().setColor(Color.getCyan());
+style.getFont().setBold(true);
+
+// Set JsonLayoutOptions
+JsonLayoutOptions options = new JsonLayoutOptions();
+options.setTitleStyle(style);
+options.setArrayAsTable(true);
+
+// Export JSON Data
+JsonUtility.importData(jsonInput, worksheet.getCells(), 0, 0, options);
+
+// Save Excel file
+workbook.save("C:\\Files\\Output.xlsx");
